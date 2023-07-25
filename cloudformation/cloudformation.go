@@ -42,8 +42,10 @@ func ListResources(stackName string) ([]AwsResource, error) {
 		},
 	}
 
-	for i := 0; i < len(resourceList); i++ {
-		res := resourceList[i]
+	for len(resourceList) > 0 {
+		res := resourceList[0]
+		resourceList = resourceList[1:]
+
 		if res.Type != typeStack && res.Type != typeProduct {
 			fmt.Println(res.Type, res.Id)
 			continue
