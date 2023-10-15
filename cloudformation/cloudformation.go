@@ -36,18 +36,16 @@ func ListResources(stackName string) ([]AwsResource, error) {
 	accountId := *output.Account
 
 	resourceList := []AwsResource{
-		{
-			Type: typeStack,
-			Id:   stackName,
-		},
+		{typeStack, stackName},
 	}
+	result := []AwsResource{}
 
 	for len(resourceList) > 0 {
 		res := resourceList[0]
 		resourceList = resourceList[1:]
 
 		if res.Type != typeStack && res.Type != typeProduct {
-			fmt.Println(res.Type, res.Id)
+			result = append(result, res)
 			continue
 		}
 
@@ -72,5 +70,5 @@ func ListResources(stackName string) ([]AwsResource, error) {
 		}
 	}
 
-	return resourceList, nil
+	return result, nil
 }

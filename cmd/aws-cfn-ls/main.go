@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"sort"
 
 	"github.com/hangxie/aws-utils/cloudformation"
 )
@@ -18,7 +19,17 @@ func main() {
 		os.Exit(1)
 	}
 
+	sort.Slice(resourceList, lessFunc(resourceList))
 	for _, r := range resourceList {
 		fmt.Println(r.Type, r.Id)
+	}
+}
+
+func lessFunc(list []cloudformation.AwsResource) func(int, int) bool {
+	return func(i, j int) bool {
+		if list[i].Type == list[j].Type {
+			return list[i].Id < list[j].Type
+		}
+		return list[i].Type < list[j].Type
 	}
 }
